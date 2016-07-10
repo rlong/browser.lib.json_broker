@@ -16,7 +16,7 @@ module typescript.lib.json_broker.angular1 {
 
     import BrokerMessage = typescript.lib.json_broker.BrokerMessage;
 
-    function post( $http: angular.IHttpService, url: string = "/_dynamic_/open/services" ): angular.IHttpPromise<BrokerMessage> {
+    function post( $http: angular.IHttpService, url: string = "/services" ): angular.IHttpPromise<BrokerMessage> {
 
         var httpPromise: angular.IHttpPromise<IHttpResponse> = $http.post( url, this.toData() );
 
@@ -48,7 +48,7 @@ module typescript.lib.json_broker.angular1 {
                 ( resolve, reject )  => {
 
                     var angularPromise: angular.IHttpPromise<IHttpResponse>;
-                    angularPromise = this.$http.post( "/_dynamic_/open/services", request.toData() )
+                    angularPromise = this.$http.post( "/services", request.toData() )
 
                     angularPromise.then(
                         (promiseValue:IHttpResponse) => {
