@@ -21,7 +21,7 @@ class ViewController {
 
     constructor( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ) {
 
-        let requestHandler = lib.json_broker.angular1.buildRequestHandler( $http, $q, $scope );
+        let requestHandler = lib.json_broker.angular1.buildRequestHandler( $http, $q );
         this.proxy = new TestProxy(requestHandler);
         this.$scope = $scope;
     }

@@ -176,7 +176,7 @@ module lib.json_broker.angular1 {
 
     }
 
-    export function buildRequestHandler( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ): IRequestHandler {
+    export function buildRequestHandler( $http: angular.IHttpService, $q: angular.IQService ): IRequestHandler {
 
         if( 0 === location.protocol.indexOf("http") ) {
             return new http.RequestHandler( $http, $q );
