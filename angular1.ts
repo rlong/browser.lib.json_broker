@@ -4,114 +4,185 @@
 
 
 /// <reference path="../typings/index.d.ts" />
-/// <reference path="typescript.lib.json_broker.ts" />
+/// <reference path="lib.json_broker.ts" />
 
 
 
-module typescript.lib.json_broker.angular1 {
+module lib.json_broker.angular1 {
 
-    export interface IHttpResponse {
-        data: any;
-    }
+    import BrokerMessage = lib.json_broker.BrokerMessage;
 
-    import BrokerMessage = typescript.lib.json_broker.BrokerMessage;
+    export namespace http {
 
-    function post( $http: angular.IHttpService, url: string = "/services" ): angular.IHttpPromise<BrokerMessage> {
+        export interface IHttpResponse {
+            data: any;
+        }
 
-        var httpPromise: angular.IHttpPromise<IHttpResponse> = $http.post( url, this.toData() );
+        function post( $http: angular.IHttpService, url: string = "/services" ): angular.IHttpPromise<BrokerMessage> {
 
-        return httpPromise.then(
-            (response: IHttpResponse) => { // successCallback
-                return new BrokerMessage( response.data ); // zzz
+            var httpPromise: angular.IHttpPromise<IHttpResponse> = $http.post( url, this.toData() );
+
+            return httpPromise.then(
+                (response: IHttpResponse) => { // successCallback
+                    return new BrokerMessage( response.data ); // zzz
+                }
+            );
+
+        }
+
+        // typescript.lib.json_broker.angular1.AngularRequestHandler
+        export class RequestHandler implements IRequestHandler {
+
+
+            $http: angular.IHttpService;
+            $q: angular.IQService;
+
+
+            constructor( $http: angular.IHttpService, $q: angular.IQService) {
+
+                this.$http = $http;
+                this.$q = $q;
             }
-        );
+
+
+            dispatch( request: lib.json_broker.BrokerMessage ): Promise<BrokerMessage> {
+
+                var angularPromise: angular.IHttpPromise<IHttpResponse>;
+                angularPromise = this.$http.post( "/services", request.toData() )
+
+
+                let answer: any = angularPromise.then( // hacky, but works
+                    (promiseValue:IHttpResponse) => {
+
+                        let response = new BrokerMessage(promiseValue.data);
+                        return response;
+                    }
+                );
+
+                return answer;
+
+            }
+
+        }
+
+
+        // typescript.lib.json_broker.angular1.AngularRequestHandler
+        export class AngularRequestHandler2 implements IRequestHandler {
+
+            $http: angular.IHttpService;
+            $q: angular.IQService;
+            $scope: angular.IScope;
+
+
+            constructor( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ) {
+
+                console.warn( "AngularRequestHandler2 is broken ... Promise callbacks are not called within a $digest()");
+                this.$http = $http;
+                this.$q = $q;
+                this.$scope = $scope;
+
+            }
+
+
+            dispatch( request: lib.json_broker.BrokerMessage ): Promise<BrokerMessage> {
+
+                // map an angular promise to an ES6 promise ...
+                let answer = new Promise(
+
+                    ( resolve, reject )  => {
+
+                        var angularPromise: angular.IHttpPromise<IHttpResponse>;
+                        angularPromise = this.$http.post( "/services", request.toData() )
+
+                        angularPromise.then(
+                            (promiseValue:IHttpResponse) => {
+
+                                let response = new BrokerMessage(promiseValue.data);
+                                if( "fault" == response.messageType ) {
+                                    reject( response );
+                                } else {
+                                    resolve( response );
+                                }
+                            },
+                            ( reason ) => {
+                                reject( reason );
+                            }
+                        )
+                    }
+                );
+
+                return answer;
+            }
+
+        }
 
     }
 
-    // typescript.lib.json_broker.angular1.AngularRequestHandler
-    export class AngularRequestHandler implements IRequestHandler {
+    export namespace embedded {
 
+        import IDeferred = angular.IDeferred;
+        class Callback implements lib.json_broker.embedded.ICallback {
 
-        $http: angular.IHttpService;
-        $q: angular.IQService;
+            defer: IDeferred<BrokerMessage>;
 
+            constructor( $q: angular.IQService ) {
 
-        constructor( $http: angular.IHttpService, $q: angular.IQService) {
+                this.defer = $q.defer<BrokerMessage>();
+            }
 
-            this.$http = $http;
-            this.$q = $q;
+            handleResponse( response: BrokerMessage ) {
+                this.defer.resolve( response );
+            }
+
+            handleFault( fault: BrokerMessage ) {
+                this.defer.reject(fault);
+            }
+
         }
 
-
-        dispatch( request: typescript.lib.json_broker.BrokerMessage ): Promise<BrokerMessage> {
-
-            var angularPromise: angular.IHttpPromise<IHttpResponse>;
-            angularPromise = this.$http.post( "/services", request.toData() )
+        export class RequestHandler implements IRequestHandler {
 
 
-            let answer: any = angularPromise.then( // hacky, but works
-                (promiseValue:IHttpResponse) => {
+            $q: angular.IQService;
 
-                    let response = new BrokerMessage(promiseValue.data);
-                    return response;
-                }
-            );
+            constructor( $q: angular.IQService ) {
+                this.$q = $q;
+            }
 
-            return answer;
+            //dispatch(request:BrokerMessage);
+            dispatch(request:BrokerMessage): Promise<BrokerMessage> {
 
+                this.$q.defer()
+
+                var callback = new Callback( this.$q );
+                lib.json_broker.embedded.setupCallback( request, callback )
+
+                var call = "jsonbroker:" + request.toData();
+
+                // vvv http://blog.techno-barje.fr/post/2010/10/06/UIWebView-secrets-part3-How-to-properly-call-ObjectiveC-from-Javascript
+
+                var iframe = document.createElement("IFRAME");
+                iframe.setAttribute( "src", call );
+                document.documentElement.appendChild(iframe);
+                iframe.parentNode.removeChild(iframe);
+                iframe = null;
+
+                // ^^^ http://blog.techno-barje.fr/post/2010/10/06/UIWebView-secrets-part3-How-to-properly-call-ObjectiveC-from-Javascript
+
+                return callback.defer.promise;
+
+            }
         }
 
     }
 
+    export function buildRequestHandler( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ): IRequestHandler {
 
-    // typescript.lib.json_broker.angular1.AngularRequestHandler
-    export class AngularRequestHandler2 implements IRequestHandler {
-
-        $http: angular.IHttpService;
-        $q: angular.IQService;
-        $scope: angular.IScope;
-
-
-        constructor( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ) {
-
-            console.warn( "AngularRequestHandler2 is broken ... Promise callbacks are not called within a $digest()");
-            this.$http = $http;
-            this.$q = $q;
-            this.$scope = $scope;
-
+        if( 0 === location.protocol.indexOf("http") ) {
+            return new http.RequestHandler( $http, $q );
         }
-
-
-        dispatch( request: typescript.lib.json_broker.BrokerMessage ): Promise<BrokerMessage> {
-
-            // map an angular promise to an ES6 promise ...
-            let answer = new Promise(
-
-                ( resolve, reject )  => {
-
-                    var angularPromise: angular.IHttpPromise<IHttpResponse>;
-                    angularPromise = this.$http.post( "/services", request.toData() )
-
-                    angularPromise.then(
-                        (promiseValue:IHttpResponse) => {
-
-                            let response = new BrokerMessage(promiseValue.data);
-                            resolve( response );
-
-                        },
-                        ( reason ) => {
-                            reject( reason );
-                        }
-                    )
-                }
-            );
-
-            return answer;
-
-        }
-
+        return new embedded.RequestHandler( $q );
 
     }
-
 
 }

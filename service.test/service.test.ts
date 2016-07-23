@@ -5,15 +5,15 @@
 
 
 /// <reference path="../../typings/Promise.d.ts" />
-/// <reference path="../typescript.lib.json_broker.ts" />
+/// <reference path="../lib.json_broker.ts" />
 
-module typescript.lib.json_broker.service.test {
+module lib.json_broker.service.test {
 
 
     const SERVICE_NAME = "jsonbroker.TestService";
 
-    import IRequestHandler = typescript.lib.json_broker.IRequestHandler;
-    import BrokerMessage = typescript.lib.json_broker.BrokerMessage;
+    import IRequestHandler = lib.json_broker.IRequestHandler;
+    import BrokerMessage = lib.json_broker.BrokerMessage;
 
     export class TestProxy {
 
@@ -26,9 +26,7 @@ module typescript.lib.json_broker.service.test {
 
         ping(): Promise<void> {
 
-            let request = new typescript.lib.json_broker.BrokerMessage();
-            request.serviceName = SERVICE_NAME;
-            request.methodName = "ping";
+            let request = lib.json_broker.BrokerMessage.buildRequest( SERVICE_NAME, "ping" );
 
             return this.requestHandler.dispatch( request ).then(
                 () => {}

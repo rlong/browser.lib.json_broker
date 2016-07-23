@@ -3,16 +3,14 @@
  */
 
 /// <reference path="../../typings/index.d.ts" />
-/// <reference path="../typescript.lib.json_broker.ts" />
+/// <reference path="../lib.json_broker.ts" />
 /// <reference path="../angular1.ts" />
 /// <reference path="service.test.ts" />
 
 
 
-import AngularRequestHandler = typescript.lib.json_broker.angular1.AngularRequestHandler;
-import AngularRequestHandler2 = typescript.lib.json_broker.angular1.AngularRequestHandler2;
-import BrokerMessage = typescript.lib.json_broker.BrokerMessage;
-import TestProxy = typescript.lib.json_broker.service.test.TestProxy;
+import BrokerMessage = lib.json_broker.BrokerMessage;
+import TestProxy = lib.json_broker.service.test.TestProxy;
 
 
 class ViewController {
@@ -23,8 +21,7 @@ class ViewController {
 
     constructor( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ) {
 
-        let requestHandler = new AngularRequestHandler( $http, $q);
-        //let requestHandler = new AngularRequestHandler2( $http, $q, $scope);
+        let requestHandler = lib.json_broker.angular1.buildRequestHandler( $http, $q, $scope );
         this.proxy = new TestProxy(requestHandler);
         this.$scope = $scope;
     }
