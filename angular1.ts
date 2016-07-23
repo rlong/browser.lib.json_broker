@@ -31,12 +31,54 @@ module typescript.lib.json_broker.angular1 {
     // typescript.lib.json_broker.angular1.AngularRequestHandler
     export class AngularRequestHandler implements IRequestHandler {
 
+
         $http: angular.IHttpService;
+        $q: angular.IQService;
 
 
-        constructor( $http: angular.IHttpService ) {
+        constructor( $http: angular.IHttpService, $q: angular.IQService) {
 
             this.$http = $http;
+            this.$q = $q;
+        }
+
+
+        dispatch( request: typescript.lib.json_broker.BrokerMessage ): Promise<BrokerMessage> {
+
+            var angularPromise: angular.IHttpPromise<IHttpResponse>;
+            angularPromise = this.$http.post( "/services", request.toData() )
+
+
+            let answer: any = angularPromise.then( // hacky, but works
+                (promiseValue:IHttpResponse) => {
+
+                    let response = new BrokerMessage(promiseValue.data);
+                    return response;
+                }
+            );
+
+            return answer;
+
+        }
+
+    }
+
+
+    // typescript.lib.json_broker.angular1.AngularRequestHandler
+    export class AngularRequestHandler2 implements IRequestHandler {
+
+        $http: angular.IHttpService;
+        $q: angular.IQService;
+        $scope: angular.IScope;
+
+
+        constructor( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ) {
+
+            console.warn( "AngularRequestHandler2 is broken ... Promise callbacks are not called within a $digest()");
+            this.$http = $http;
+            this.$q = $q;
+            this.$scope = $scope;
+
         }
 
 
@@ -55,6 +97,7 @@ module typescript.lib.json_broker.angular1 {
 
                             let response = new BrokerMessage(promiseValue.data);
                             resolve( response );
+
                         },
                         ( reason ) => {
                             reject( reason );
@@ -67,6 +110,8 @@ module typescript.lib.json_broker.angular1 {
 
         }
 
+
     }
+
 
 }

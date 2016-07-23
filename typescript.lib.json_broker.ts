@@ -42,6 +42,16 @@
                     }
                 }
 
+
+                public static buildRequest( serviceName: string, methodName: string ): BrokerMessage {
+
+                    let answer: BrokerMessage = new BrokerMessage();
+                    answer.serviceName = serviceName;
+                    answer.methodName = methodName;
+                    return answer;
+
+                }
+
                 toArray():any[] {
                     var answer = new Array(6);
                     answer[0] = this.messageType;
