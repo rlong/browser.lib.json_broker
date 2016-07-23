@@ -48,7 +48,7 @@ module lib.json_broker.angular1 {
             dispatch( request: lib.json_broker.BrokerMessage ): Promise<BrokerMessage> {
 
                 var angularPromise: angular.IHttpPromise<IHttpResponse>;
-                angularPromise = this.$http.post( "/services", request.toData() )
+                angularPromise = this.$http.post( "/services", request.toData() );
 
 
                 let answer: any = angularPromise.then( // hacky, but works
@@ -149,25 +149,13 @@ module lib.json_broker.angular1 {
                 this.$q = $q;
             }
 
-            //dispatch(request:BrokerMessage);
             dispatch(request:BrokerMessage): Promise<BrokerMessage> {
 
                 this.$q.defer()
 
                 var callback = new Callback( this.$q );
-                lib.json_broker.embedded.setupCallback( request, callback )
 
-                var call = "jsonbroker:" + request.toData();
-
-                // vvv http://blog.techno-barje.fr/post/2010/10/06/UIWebView-secrets-part3-How-to-properly-call-ObjectiveC-from-Javascript
-
-                var iframe = document.createElement("IFRAME");
-                iframe.setAttribute( "src", call );
-                document.documentElement.appendChild(iframe);
-                iframe.parentNode.removeChild(iframe);
-                iframe = null;
-
-                // ^^^ http://blog.techno-barje.fr/post/2010/10/06/UIWebView-secrets-part3-How-to-properly-call-ObjectiveC-from-Javascript
+                lib.json_broker.embedded.dispatch( request, callback );
 
                 return callback.defer.promise;
 

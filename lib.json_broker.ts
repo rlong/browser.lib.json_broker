@@ -75,23 +75,35 @@
 
      export module embedded {
 
-         var callbackId = 1;
-
          export interface ICallback {
              handleResponse( response: BrokerMessage );
              handleFault( fault: BrokerMessage );
          }
 
+         var callbackId = 1;
          var pendingCallbacks: { [callbackId: number]: ICallback; } = { };
 
 
-         export function setupCallback( request: BrokerMessage, callback: ICallback ) {
+         export function dispatch(request:BrokerMessage, callback: ICallback ): void {
 
              request.metaData["callbackId"] = callbackId;
              pendingCallbacks[callbackId] = callback;
              callbackId++;
-         }
 
+
+             var call = "jsonbroker:" + request.toData();
+
+             // vvv http://blog.techno-barje.fr/post/2010/10/06/UIWebView-secrets-part3-How-to-properly-call-ObjectiveC-from-Javascript
+
+             var iframe = document.createElement("IFRAME");
+             iframe.setAttribute( "src", call );
+             document.documentElement.appendChild(iframe);
+             iframe.parentNode.removeChild(iframe);
+             iframe = null;
+
+             // ^^^ http://blog.techno-barje.fr/post/2010/10/06/UIWebView-secrets-part3-How-to-properly-call-ObjectiveC-from-Javascript
+
+         }
 
          // returns null when there is no issues
          export function handleFault( response: BrokerMessage ): string {
@@ -135,7 +147,6 @@
          }
 
      }
-
 
  }
 
