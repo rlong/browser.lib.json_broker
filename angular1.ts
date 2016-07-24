@@ -161,7 +161,6 @@ module lib.json_broker.angular1 {
 
             }
         }
-
     }
 
     export function buildRequestHandler( $http: angular.IHttpService, $q: angular.IQService ): IRequestHandler {

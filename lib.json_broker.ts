@@ -18,7 +18,7 @@
          majorVersion:number = 1;
          minorVersion:number = 0;
          methodName:string = "__METHOD_NAME__";
-         associativeParamaters:any = {};
+         associativeParameters:any = {};
          orderedParamaters:any[];
 
          constructor(poja?:any[]) { // poja: plain old javascript array
@@ -33,7 +33,7 @@
                  if (Array.isArray(params)) {
                      this.orderedParamaters = params;
                  } else {
-                     this.associativeParamaters = params;
+                     this.associativeParameters = params;
                  }
              }
          }
@@ -56,7 +56,7 @@
              answer[3] = this.majorVersion;
              answer[4] = this.minorVersion;
              answer[5] = this.methodName;
-             answer[6] = this.associativeParamaters;
+             answer[6] = this.associativeParameters;
              if (this.orderedParamaters) {
                  answer[6] = this.orderedParamaters;
              }

@@ -74,7 +74,7 @@ module lib.json_broker.mithril {
             }
 
             handleFault( fault: BrokerMessage ) {
-                this.resolve( fault );
+                this.reject( fault );
             }
         }
     }
