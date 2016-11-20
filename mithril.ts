@@ -3,14 +3,15 @@
  */
 
 
-/// <reference path="../typings/index.d.ts" />
-/// <reference path="../typings/Promise.d.ts" />
-/// <reference path="lib.json_broker.ts" />
+/// <reference path="../../typings/index.d.ts" />
+/// <reference path="../../typings/Promise.d.ts" />
+/// <reference path="json_broker.ts" />
 
 
-module lib.json_broker.mithril {
 
-    import BrokerMessage = lib.json_broker.BrokerMessage;
+module json_broker.mithril {
+
+    import BrokerMessage = json_broker.BrokerMessage;
 
     export module http {
 
@@ -53,7 +54,7 @@ module lib.json_broker.mithril {
 
     export module embedded {
 
-        class Callback implements lib.json_broker.embedded.ICallback {
+        class Callback implements json_broker.embedded.ICallback {
 
             promise: Promise<BrokerMessage> = null;
             resolve = null;

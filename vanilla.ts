@@ -3,13 +3,13 @@
  */
 
 
-/// <reference path="../typings/Promise.d.ts" />
-/// <reference path="lib.json_broker.ts" />
+/// <reference path="../../typings/Promise.d.ts" />
+/// <reference path="json_broker.ts" />
 
-module lib.json_broker.vanilla {
+module json_broker.vanilla {
 
 
-    import BrokerMessage = lib.json_broker.BrokerMessage;
+    import BrokerMessage = json_broker.BrokerMessage;
 
     export module http {
 

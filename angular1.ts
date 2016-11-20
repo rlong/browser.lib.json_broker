@@ -3,14 +3,14 @@
  */
 
 
-/// <reference path="../typings/index.d.ts" />
-/// <reference path="lib.json_broker.ts" />
+/// <reference path="../../typings/index.d.ts" />
+/// <reference path="json_broker.ts" />
 
 
 
-module lib.json_broker.angular1 {
+module json_broker.angular1 {
 
-    import BrokerMessage = lib.json_broker.BrokerMessage;
+    import BrokerMessage = json_broker.BrokerMessage;
 
     export namespace http {
 
@@ -45,7 +45,7 @@ module lib.json_broker.angular1 {
             }
 
 
-            dispatch( request: lib.json_broker.BrokerMessage ): Promise<BrokerMessage> {
+            dispatch( request: json_broker.BrokerMessage ): Promise<BrokerMessage> {
 
                 var angularPromise: angular.IHttpPromise<IHttpResponse>;
                 angularPromise = this.$http.post( "/services", request.toData() );
@@ -84,7 +84,7 @@ module lib.json_broker.angular1 {
             }
 
 
-            dispatch( request: lib.json_broker.BrokerMessage ): Promise<BrokerMessage> {
+            dispatch( request: json_broker.BrokerMessage ): Promise<BrokerMessage> {
 
                 // map an angular promise to an ES6 promise ...
                 let answer = new Promise(
@@ -121,7 +121,7 @@ module lib.json_broker.angular1 {
     export namespace embedded {
 
         import IDeferred = angular.IDeferred;
-        class Callback implements lib.json_broker.embedded.ICallback {
+        class Callback implements json_broker.embedded.ICallback {
 
             defer: IDeferred<BrokerMessage>;
 
@@ -155,7 +155,7 @@ module lib.json_broker.angular1 {
 
                 var callback = new Callback( this.$q );
 
-                lib.json_broker.embedded.dispatch( request, callback );
+                json_broker.embedded.dispatch( request, callback );
 
                 return callback.defer.promise;
 

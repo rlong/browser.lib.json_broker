@@ -2,15 +2,15 @@
  * Created by rlong on 13/03/2016.
  */
 
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../lib.json_broker.ts" />
+/// <reference path="../../../typings/index.d.ts" />
+/// <reference path="../json_broker.ts" />
 /// <reference path="../angular1.ts" />
 /// <reference path="service.test.ts" />
 
 
 
-import BrokerMessage = lib.json_broker.BrokerMessage;
-import TestProxy = lib.json_broker.service.test.TestProxy;
+import BrokerMessage = json_broker.BrokerMessage;
+import TestProxy = json_broker.service.test.TestProxy;
 
 
 class ViewController {
@@ -21,7 +21,7 @@ class ViewController {
 
     constructor( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ) {
 
-        let requestHandler = lib.json_broker.angular1.buildRequestHandler( $http, $q );
+        let requestHandler = json_broker.angular1.buildRequestHandler( $http, $q );
         this.proxy = new TestProxy(requestHandler);
         this.$scope = $scope;
     }

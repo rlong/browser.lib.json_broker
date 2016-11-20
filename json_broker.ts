@@ -4,11 +4,11 @@
 
 
 
-/// <reference path="../typings/index.d.ts" />
-/// <reference path="../typings/Promise.d.ts" />
+/// <reference path="../../typings/index.d.ts" />
+/// <reference path="../../typings/Promise.d.ts" />
 
 
- module lib.json_broker {
+ module json_broker {
 
      export class BrokerMessage {
 
@@ -147,6 +147,44 @@
          }
 
      }
+
+     export module fault {
+
+
+         // lib.json_broker.fault.numberFaultCodeToString( 560361060 );
+         export function numberFaultCodeToString( faultCode: number ) {
+
+             var answer = "";
+             while( 0 < faultCode ) {
+
+                 let asciiCode = faultCode & 0xFF;
+                 // console.log( asciiCode );
+                 answer = String.fromCharCode(asciiCode) + answer;
+
+                 faultCode >>= 8;
+             }
+
+             return answer;
+         }
+
+
+
+         // lib.json_broker.fault.stringFaultCodeToNumber( '!fnd' );
+         export function stringFaultCodeToNumber(  faultCode: string ) {
+
+             var answer: number = 0;
+
+             for( var index = 0; index < faultCode.length; index++ ) {
+
+                 answer <<= 8;
+                 answer |= faultCode.charCodeAt( index );
+             }
+
+             return answer;
+         }
+     }
+
+
 
  }
 

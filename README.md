@@ -1,1 +1,1 @@
-# typescript.lib.json_broker
+# browser.lib.json_broker
