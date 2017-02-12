@@ -30,7 +30,7 @@ module json_broker.angular1 {
 
         }
 
-        // typescript.lib.json_broker.angular1.AngularRequestHandler
+        // json_broker.angular1.http.RequestHandler
         export class RequestHandler implements IRequestHandler {
 
 
@@ -66,7 +66,7 @@ module json_broker.angular1 {
         }
 
 
-        // typescript.lib.json_broker.angular1.AngularRequestHandler
+        // json_broker.angular1.http.AngularRequestHandler2
         export class AngularRequestHandler2 implements IRequestHandler {
 
             $http: angular.IHttpService;

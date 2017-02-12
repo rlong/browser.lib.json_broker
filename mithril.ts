@@ -15,7 +15,7 @@ module json_broker.mithril {
 
     export module http {
 
-        // typescript.lib.json_broker.angular1.MithrilRequestHandler
+        // json_broker.angular1.MithrilRequestHandler
         export class RequestHandler implements IRequestHandler {
 
             dispatch( request:BrokerMessage ): Promise<BrokerMessage> {

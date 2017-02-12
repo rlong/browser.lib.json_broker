@@ -19,7 +19,7 @@
          minorVersion:number = 0;
          methodName:string = "__METHOD_NAME__";
          associativeParameters:any = {};
-         orderedParamaters:any[];
+         orderedParameters:any[];
 
          constructor(poja?:any[]) { // poja: plain old javascript array
              if (poja) {
@@ -31,7 +31,7 @@
                  this.methodName = poja[5];
                  let params = poja[6];
                  if (Array.isArray(params)) {
-                     this.orderedParamaters = params;
+                     this.orderedParameters = params;
                  } else {
                      this.associativeParameters = params;
                  }
@@ -48,6 +48,20 @@
 
          }
 
+         public static buildRequestWithOrderedParameters( serviceName: string,
+                                                          methodName: string,
+                                                          orderedParameters:any[] = [] ): BrokerMessage {
+
+             let answer: BrokerMessage = new BrokerMessage();
+             answer.serviceName = serviceName;
+             answer.methodName = methodName;
+             answer.orderedParameters = orderedParameters;
+
+             return answer;
+
+         }
+
+
          toArray():any[] {
              var answer = new Array(6);
              answer[0] = this.messageType;
@@ -57,8 +71,8 @@
              answer[4] = this.minorVersion;
              answer[5] = this.methodName;
              answer[6] = this.associativeParameters;
-             if (this.orderedParamaters) {
-                 answer[6] = this.orderedParamaters;
+             if (this.orderedParameters) {
+                 answer[6] = this.orderedParameters;
              }
              return answer;
          }
