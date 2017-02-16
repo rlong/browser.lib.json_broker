@@ -4,25 +4,24 @@
 
 /// <reference path="../../../typings/index.d.ts" />
 /// <reference path="../json_broker.ts" />
-/// <reference path="../angular1.ts" />
+/// <reference path="../json_broker.angular1.ts" />
 /// <reference path="service.test.ts" />
 
 
 
 import BrokerMessage = json_broker.BrokerMessage;
-import TestProxy = json_broker.service.test.TestProxy;
 
 
 class ViewController {
 
 
-    proxy: TestProxy;
+    proxy: test.Proxy;
     $scope: angular.IScope;
 
     constructor( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ) {
 
-        let requestHandler = json_broker.angular1.buildRequestHandler( $http, $q );
-        this.proxy = new TestProxy(requestHandler);
+        let adapter = json_broker.angular1.buildBrokerAdapter( $http, $q );
+        this.proxy = new test.Proxy(adapter);
         this.$scope = $scope;
     }
 

@@ -7,31 +7,30 @@
 /// <reference path="../../../typings/Promise.d.ts" />
 /// <reference path="../json_broker.ts" />
 
-module json_broker.service.test {
+module test {
 
 
     const SERVICE_NAME = "jsonbroker.TestService";
 
-    import IRequestHandler = json_broker.IRequestHandler;
+    import IBrokerAdapter = json_broker.IBrokerAdapter;
     import BrokerMessage = json_broker.BrokerMessage;
 
-    export class TestProxy {
+    export class Proxy {
 
-        requestHandler: IRequestHandler;
+        adapter: IBrokerAdapter;
 
-        constructor( requestHandler: IRequestHandler ) {
+        constructor( adapter: IBrokerAdapter ) {
 
-            this.requestHandler = requestHandler;
+            this.adapter = adapter;
         }
 
         ping(): Promise<void> {
 
             let request = json_broker.BrokerMessage.buildRequest( SERVICE_NAME, "ping" );
 
-            return this.requestHandler.dispatch( request ).then(
+            return this.adapter.dispatch( request ).then(
                 () => {}
             );
-
         }
 
     }

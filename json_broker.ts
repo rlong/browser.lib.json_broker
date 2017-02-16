@@ -3,12 +3,9 @@
  */
 
 
-
 /// <reference path="../../typings/index.d.ts" />
-/// <reference path="../../typings/Promise.d.ts" />
 
-
- module json_broker {
+module json_broker {
 
      export class BrokerMessage {
 
@@ -61,7 +58,6 @@
 
          }
 
-
          toArray():any[] {
              var answer = new Array(6);
              answer[0] = this.messageType;
@@ -84,7 +80,15 @@
      }
 
      export interface IRequestHandler {
-         dispatch(request:BrokerMessage): Promise<BrokerMessage>;
+
+         dispatch(request:BrokerMessage): angular.IPromise<BrokerMessage>;
+     }
+
+     export interface IBrokerAdapter extends IRequestHandler  {
+
+         dispatch(request:BrokerMessage): angular.IPromise<BrokerMessage>;
+         reject(): angular.IPromise<any>;
+         resolve<T>(value: angular.IPromise<T>|T) : angular.IPromise<T>;
      }
 
      export module embedded {
@@ -164,7 +168,6 @@
 
      export module fault {
 
-
          // lib.json_broker.fault.numberFaultCodeToString( 560361060 );
          export function numberFaultCodeToString( faultCode: number ) {
 
@@ -181,8 +184,6 @@
              return answer;
          }
 
-
-
          // lib.json_broker.fault.stringFaultCodeToNumber( '!fnd' );
          export function stringFaultCodeToNumber(  faultCode: string ) {
 
@@ -197,8 +198,6 @@
              return answer;
          }
      }
-
-
 
  }
 
