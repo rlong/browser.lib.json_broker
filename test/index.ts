@@ -2,14 +2,8 @@
  * Created by rlong on 13/03/2016.
  */
 
-/// <reference path="../../../typings/index.d.ts" />
+
 /// <reference path="../json_broker.ts" />
-/// <reference path="../json_broker.angular1.ts" />
-/// <reference path="service.test.ts" />
-
-
-
-import BrokerMessage = json_broker.BrokerMessage;
 
 
 class ViewController {
@@ -20,7 +14,7 @@ class ViewController {
 
     constructor( $http: angular.IHttpService, $q: angular.IQService, $scope: angular.IScope ) {
 
-        let adapter = json_broker.angular1.buildBrokerAdapter( $http, $q );
+        let adapter = json_broker.buildBrokerAdapter( $http, $q );
         this.proxy = new test.Proxy(adapter);
         this.$scope = $scope;
     }
@@ -41,7 +35,7 @@ class ViewController {
             , (response ) => { // errorCallback
                 console.error( response );
             }
-        )
+         )
     }
 
 }

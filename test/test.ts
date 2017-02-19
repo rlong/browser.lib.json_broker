@@ -3,12 +3,9 @@
  */
 
 
-
-/// <reference path="../../../typings/Promise.d.ts" />
 /// <reference path="../json_broker.ts" />
 
 module test {
-
 
     const SERVICE_NAME = "jsonbroker.TestService";
 
@@ -24,7 +21,7 @@ module test {
             this.adapter = adapter;
         }
 
-        ping(): Promise<void> {
+        ping(): angular.IPromise<void> {
 
             let request = json_broker.BrokerMessage.buildRequest( SERVICE_NAME, "ping" );
 
@@ -32,9 +29,7 @@ module test {
                 () => {}
             );
         }
-
     }
 
+
 }
-
-
