@@ -89,7 +89,10 @@ module json_broker {
 
         dispatch(request:BrokerMessage): angular.IPromise<BrokerMessage>;
         reject(): angular.IPromise<any>;
+
+        resolve<T>() : angular.IPromise<void>;
         resolve<T>(value: angular.IPromise<T>|T) : angular.IPromise<T>;
+
     }
 
     export module embedded {
@@ -239,7 +242,7 @@ module json_broker {
                 return this.$q.reject()
             }
 
-            resolve<T>(value: angular.IPromise<T>|T) : angular.IPromise<T> {
+            resolve<T>(value?: angular.IPromise<T>|T) : angular.IPromise<T> {
                 return this.$q.resolve<T>(value);
             }
 
@@ -293,9 +296,11 @@ module json_broker {
                 return this.$q.reject()
             }
 
-            resolve<T>(value: angular.IPromise<T>|T) : angular.IPromise<T> {
+            resolve<T>(value?: angular.IPromise<T>|T) : angular.IPromise<T> {
+
                 return this.$q.resolve<T>(value);
             }
+
         }
     }
 
