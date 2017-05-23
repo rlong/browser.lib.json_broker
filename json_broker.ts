@@ -227,7 +227,7 @@ module json_broker {
                 angularPromise = this.$http.post( "/services", request.toData() );
 
 
-                let answer: any = angularPromise.then( // hacky, but works
+                let answer: any = angularPromise.then(
                     (promiseValue:IHttpResponse) => {
 
                         let response = new BrokerMessage(promiseValue.data);
